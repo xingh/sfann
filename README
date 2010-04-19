@@ -1,0 +1,95 @@
+
+  ------------------------------------------------------------------
+     Sfann v0.1 : Simple and Fast Artificial Neural Networks
+  ------------------------------------------------------------------
+
+     Copyright (C) 2010 Stanislas Oger
+
+  ..................................................................
+
+     This file is part of Sfann
+
+     Sfann is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with this program; if not, write to the Free Software
+     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+..................................................................
+
+     Contact :
+               stanislas.oger@gmail.com
+  ..................................................................
+
+
+ ------
+ README
+ ------
+
+  I   : About this program
+  II  : Features
+  III : Installation
+  IV  : Changelog
+
+
+I - About this program
+----------------------
+
+This program is a command-line tool that provides an easy way of learning, testing and running artificial neural networks (ANN). It uses the Fast Artificial Neural Network library (FANN) for learning and testing.
+
+An artificial neural network (ANN), usually called "neural network" (NN), is a mathematical model or computational model that tries to simulate the structure and/or functional aspects of biological neural networks. An ANN performs a non-parametric non-linear multivariate multiple regression.
+
+The Fast Artificial Neural Network library (FANN) is a free open source neural network library, which implements multilayer artificial neural networks in C and supports both fully and sparsely connected networks. Cross-platform execution in both fixed and floating point is supported. It includes a framework for easy handling of training data sets. It is easy to use, versatile, well documented, and fast. PHP, C++, .NET, Ada, Python, Delphi, Octave, Ruby, Prolog Pure Data and Mathematica bindings are available.
+
+
+II - Features
+-------------
+
+The main features of this program are :
+
+    * Automatic cross-validation evaluation
+    * Auto-saving of ANN that performs the best on train, dev or test
+
+
+
+III - Installation
+------------------
+
+1) The program requires external libraries :
+   * fann, available at http://leenissen.dk/fann/
+   * boost (program_option), available at http://www.boost.org/
+
+2) compile the program:
+
+   ./configure
+   make
+
+3) place the binary in your path:
+
+   cp src/sfann what/ever/you/want
+
+4) suppress the compiled files:
+
+   make clean
+
+
+
+III - Changelog
+---------------
+
+  v0.1
+  ----
+    * initial release
+
+
+
+
+

@@ -1,0 +1,35 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.61)
+AC_INIT([sfann], [0.1], [stanislas.oger@gmail.com])
+AM_INIT_AUTOMAKE()
+# AC_CONFIG_SRCDIR([src/Sfann.cpp])
+AC_CONFIG_HEADER(config.h)
+
+AC_DISABLE_SHARED
+
+# Checks for programs.
+AC_PROG_CXX
+AC_PROG_MAKE_SET
+
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-lboost_program_options':
+AC_CHECK_LIB([boost_program_options], [main])
+# FIXME: Replace `main' with a function in `-lfann':
+AC_CHECK_LIB([fann], [fann_destroy_train])
+
+# Checks for header files.
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_HEADER_STDC
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([floor])
+
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+aclocal
+autoconf
+autoheader
+automake --add-missing --foreign
+
+rm -rf autom4te.cache src/.deps ./config.status Makefile src/Makefile config.log config.h
+
+
+
+
