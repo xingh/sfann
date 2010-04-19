@@ -1,0 +1,67 @@
+#summary One-sentence summary of this page.
+
+= Program usage =
+
+Here are the options available in the revision 3 :
+
+{{{
+Usage : sann [action + options]
+                
+Generic options:
+  -h [ --help ]         prints this help message
+  -v [ --verbose ]      verbose outputs
+
+Action to perform:
+  --do-cross-validation  Perform a cross-validation on the train corpus
+  --do-training          train an ANN using the specified train/dev/test
+                         corpora
+  --do-running           run the specified ANN on the specified test corpus
+  --do-nothing           does not train ANN, only load data and generate
+                         corpora
+
+Data-related options:
+  -t [ --train ] arg    data file containing the training documents
+  -d [ --dev ] arg      data file containing the development documents
+  -s [ --test ] arg     data file containing the test documents
+  -a [ --auto-dev ] arg automatically construct a dev corpus with <arg>% of the
+                        train
+  --save-dev arg        save the automatically build development corpus
+
+ANN Specifications:
+  -l [ --num-hidden ] arg Size of the hidden layer
+
+General training options:
+  -r [ --randomize-data ]      Randomize the order of the elements in the data
+                               vectors before training
+  -i [ --clever-init ]         Use the Widrow and Nguyen's algorithm for
+                               initialize weights
+  --reports arg (=100)         Number of epoch between reports
+  --max-epoch arg (=5000)      Max epoch
+  --desired-error arg (=0.001) Desired error
+  -n [ --num-runs ] arg (=1)   Number of training/testing cycles for finding
+                               the ANN that perform the best on the Dev
+
+Cross-validation specific options:
+  --cv-num-folds arg (=10) specify the number of folds (k-folds) for cross
+                           validating on the train corpus
+  --cv-num-dev arg (=1)    specify the number of folds used for the dev corpus
+  --cv-shuffle             shuffle data before creating folds
+  -o [ --leave-one-out ]   use leave-one-out validation on the train corpus
+
+Training specific options:
+  --save-max-dev arg       save the ANN that obtains the best score on the dev
+  --save-max-train arg     save the ANN that obtains the best score on the
+                           train
+  --save-max-test arg      save the ANN that obtains the best score on the test
+  --save-max-test-run arg  save the results on the test corpus of the best test
+                           ANN
+  --save-max-dev-run arg   save the results on the test corpus of the best dev
+                           ANN
+  --save-max-train-run arg save the results on the test corpus of the best
+                           train ANN
+
+Running specific options:
+  --load-ann arg        load the specified ANN
+  --save-loaded-run arg save the results on the test corpus of the ANN loaded
+                        with --load-ann
+}}}
