@@ -1,4 +1,5 @@
 #summary How to use the program
+#labels Featured
 
 = Program usage =
 
