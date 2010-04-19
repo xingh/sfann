@@ -1,6 +1,8 @@
 
   ------------------------------------------------------------------
-     Sfann v0.1 : Simple and Fast Artificial Neural Networks
+       Sfann v0.1 : Simple and Fast Artificial Neural Networks
+
+                  http://code.google.com/p/sfann
   ------------------------------------------------------------------
 
      Copyright (C) 2010 Stanislas Oger
@@ -23,7 +25,7 @@
      along with this program; if not, write to the Free Software
      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-..................................................................
+  ..................................................................
 
      Contact :
                stanislas.oger@gmail.com
@@ -67,16 +69,21 @@ III - Installation
    * fann, available at http://leenissen.dk/fann/
    * boost (program_option), available at http://www.boost.org/
 
-2) compile the program:
+2) get the sources:
 
+   svn checkout http://sfann.googlecode.com/svn/trunk/ sfann
+
+3) compile the program:
+
+   cd sfann
    ./configure
    make
 
-3) place the binary in your path:
+4) place the binary in your path:
 
    cp src/sfann what/ever/you/want
 
-4) suppress the compiled files:
+5) suppress the compiled files:
 
    make clean
 
