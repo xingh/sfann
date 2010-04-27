@@ -46,7 +46,7 @@ Sfann::Sfann() {
         ("verbose,v", "verbose outputs")
         ;
 
-    options_description actions("Action to perform");
+    options_description actions("Action to be performed");
     actions.add_options()
         ("do-cross-validation", "Perform a cross-validation on the train corpus")
         ("do-training", "train an ANN using the specified train/dev/test corpora")
@@ -66,9 +66,9 @@ Sfann::Sfann() {
 
     options_description data("Data-related options");
     data.add_options()
-        ("train,t", value<string>(), "data file containing the training documents")
-        ("dev,d", value<string>(), "data file containing the development documents")
-        ("test,s", value<string>(), "data file containing the test documents")
+        ("train,t", value<string>(), "data file containing the training documents (fann data format)")
+        ("dev,d", value<string>(), "data file containing the development documents (fann data format)")
+        ("test,s", value<string>(), "data file containing the test documents (fann data format)")
         ("auto-dev,a", value<int>(), "automatically construct a dev corpus with <arg>% of the train")
         ("save-dev", value<string>(), "save the automatically build development corpus")
         ;
@@ -84,7 +84,7 @@ Sfann::Sfann() {
 //         ("-best-on", value<string>()->default_value("dev"), "The best ANN is the one that obtain the best results on the <arg> corpus, with <arg>=(dev|train|test)")
         ;
 
-    options_description cv_opts("Cross-validation specific options");
+    options_description cv_opts("Do-cross-validation specific options");
     cv_opts.add_options()
         ("cv-num-folds", value<int>()->default_value(10), "specify the number of folds (k-folds) for cross validating on the train corpus")
         ("cv-num-dev", value<int>()->default_value(1), "specify the number of folds used for the dev corpus")
@@ -92,7 +92,7 @@ Sfann::Sfann() {
         ("leave-one-out,o", "use leave-one-out validation on the train corpus")
         ;
         
-    options_description train_opts("Training specific options");
+    options_description train_opts("Do-training specific options");
     train_opts.add_options()
         ("save-max-dev", value<string>(), "save the ANN that obtains the best score on the dev")
         ("save-max-train", value<string>(), "save the ANN that obtains the best score on the train")
@@ -102,7 +102,7 @@ Sfann::Sfann() {
         ("save-max-train-run", value<string>(), "save the results on the test corpus of the best train ANN")
         ;
         
-    options_description run_opts("Running specific options");
+    options_description run_opts("Do-running specific options");
     run_opts.add_options()
         ("load-ann", value<string>(), "load the specified ANN")
         ("save-loaded-run", value<string>(), "save the results on the test corpus of the ANN loaded with --load-ann")
@@ -151,6 +151,12 @@ void Sfann::parse_config(int argc, char ** argv) throw (exception) {
 }
 
 void Sfann::check_options() throw(SfannException) {
+
+    bool nothing = this->config->count("do-nothing");
+    bool cross_validate = this->config->count("do-cross-validation");
+    bool training = this->config->count("do-training");
+    bool running = this->config->count("do-running");
+    
     if (this->config->count("help")) {
         throw *new SfannException("Help required");
     }
@@ -159,25 +165,25 @@ void Sfann::check_options() throw(SfannException) {
         throw *new SfannException("Incompatible options : --dev and --auto-dev");
     }
 
-    if (!this->config->count("train")) {
-        throw *new SfannException("You have to specify a training corpus");
+    if ((training || cross_validate) && !this->config->count("train")) {
+        throw *new SfannException("You have to specify a training corpus (with --train)");
     }
 
     if (this->config->count("do-running") + this->config->count("do-nothing") + this->config->count("do-training") + this->config->count("do-cross-validation") != 1) {
-        throw *new SfannException("You have to specify (only) one action to perform");
+        throw *new SfannException("You have to specify (only) one action to be performed");
     }
 
-    if (this->config->count("do-running") && (!this->config->count("load-ann") || !this->config->count("test"))) {
-        throw *new SfannException("You have to specify an ANN to run and a test corpus");
+    if (running && (!this->config->count("load-ann") || !this->config->count("test"))) {
+        throw *new SfannException("You have to specify an ANN (with --load-ann) to run and a test corpus (with --test)");
     }
 
-    if (!this->config->count("do-nothing") && (!this->config->count("num-hidden") || !this->config->count("num-runs") || !this->config->count("max-epoch") || !this->config->count("reports") || !this->config->count("desired-error"))) {
-        throw *new SfannException("You have to specify more options for training ANN");
+    if (training && (!this->config->count("num-hidden") || !this->config->count("num-runs") || !this->config->count("max-epoch") || !this->config->count("reports") || !this->config->count("desired-error"))) {
+        throw *new SfannException("You have to specify more options for training ANN (--num-hidden missing ?)");
     }
 }
 
 void Sfann::usage() {
-    cout << "Usage : sann [action + options]" << endl << *this->options << endl;
+    cout << "Usage : sfann <action> [options]" << endl << *this->options << endl;
 }
 
 
