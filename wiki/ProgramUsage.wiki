@@ -77,29 +77,27 @@ The output of Sfann should look like this:
      - creating corpus couple ...  test:2 dev:4 train:57... Ok !
      - training ... Ok !
      - classif. rate for this iteration :
--> Max classif rate on the train: train-mse=0.00  dev-ccr=100.00 %  test-ccr=100.00 %  
--> Max classif rate on the dev  : train-mse=0.00  dev-ccr=100.00 %  test-ccr=100.00 %  
--> Max classif rate on the test : train-mse=0.00  dev-ccr=100.00 %  test-ccr=100.00 %  
+-> Classif. rates of the best train MLP: train-mse=0.00  dev-ccr=100.00 %  test-ccr=100.00 %  
+-> Classif. rates of the best dev MLP  : train-mse=0.00  dev-ccr=100.00 %  test-ccr=100.00 %  
+-> Classif. rates of the best test MLP : train-mse=0.00  dev-ccr=100.00 %  test-ccr=100.00 %  
  ->  Validation number 2 ...
-
 [...etc...]
-
-->  Validation number 50 ...
+ ->  Validation number 50 ...
      - creating corpus couple ...  test:1 dev:4 train:58... Ok !
      - training ... Ok !
      - classif. rate for this iteration :
--> Max classif rate on the train: train-mse=0.00  dev-ccr=100.00 %  test-ccr=100.00 %  
--> Max classif rate on the dev  : train-mse=0.25  dev-ccr=100.00 %  test-ccr=100.00 %  
--> Max classif rate on the test : train-mse=0.25  dev-ccr=100.00 %  test-ccr=100.00 %  
+-> Classif. rates of the best train MLP: train-mse=0.00  dev-ccr=100.00 %  test-ccr=100.00 %  
+-> Classif. rates of the best dev MLP  : train-mse=0.25  dev-ccr=100.00 %  test-ccr=100.00 %  
+-> Classif. rates of the best test MLP : train-mse=0.25  dev-ccr=100.00 %  test-ccr=100.00 %  
  => Overall classif. rate :
--> Max classif rate on the train: train-mse=0.00  dev-ccr=100.00 %  test-ccr=100.00 %  
--> Max classif rate on the dev  : train-mse=0.17  dev-ccr=100.00 %  test-ccr=100.00 %  
--> Max classif rate on the test : train-mse=0.21  dev-ccr=92.86 %  test-ccr=100.00 %  
+-> Classif. rates of the best train MLP: train-mse=0.00  dev-ccr=100.00 %  test-ccr=100.00 %  
+-> Classif. rates of the best dev MLP  : train-mse=0.17  dev-ccr=100.00 %  test-ccr=100.00 %  
+-> Classif. rates of the best test MLP : train-mse=0.20  dev-ccr=94.44 %  test-ccr=100.00 %   
 }}}
 
 The lines starting by "-> Classif. rates of the best {{{<corpus>}}} MLP:" reports the performances on all the corpora of the MLP that performs the best on the corpus {{{<corpus>}}}. For a definition of CCR and MSE, please read the [FAQ#What_does_CCR_and_MSE_stand_for_? FAQ].
 
-The overall performances of the MLP is given after the line " => Overall classif. rate :".
+The overall performances of the MLP are given after the line " => Overall classif. rate :".
 
 = Program options =
 
