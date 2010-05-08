@@ -5,7 +5,7 @@
 
 Sfann accepts two data format: the native Fann data format and the [http://code.google.com/p/icsiboost Icsiboost] data format.
 
-== native Fann data format ==
+== Native Fann data format ==
 
 {{{
 num_train_data num_input num_output
