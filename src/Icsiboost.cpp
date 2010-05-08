@@ -268,9 +268,14 @@ string IcsiboostParameterContinuous::toString() {
 	return string("continuous");
 }
 
+// unknown values are set to 0
 fann_type * IcsiboostParameterContinuous::convertToNeuralRepresentation(const string & icsi_data) throw (SfannException) {
     fann_type * res = new fann_type[1];
-    sscanf(icsi_data.c_str(), "%f", res);
+    if (icsi_data.find_first_of("?") != string::npos) {
+        res[0] = 0.;
+    } else {
+        sscanf(icsi_data.c_str(), "%f", res);
+    }
 
 /*    istringstream iss (icsi_data);
     double t;
@@ -324,6 +329,7 @@ int IcsiboostParameterLabels::getNeededNeurons() throw (SfannException) {
     return this->label2id.size();
 }
 
+// When the label is unknown (?), all the outputs are set to -1
 fann_type * IcsiboostParameterLabels::convertToNeuralRepresentation(const string & icsi_data) throw (SfannException) {
     fann_type * res = new fann_type[this->label2id.size()];
     for(int i=0; i<this->label2id.size(); i++)
