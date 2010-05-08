@@ -1,7 +1,7 @@
 
 bin_PROGRAMS = sfann
 
-sfann_SOURCES = Sfann.cpp SfannException.cpp sfann_main.cpp Sfann.hpp SfannException.hpp
+sfann_SOURCES = Sfann.cpp SfannException.cpp Icsiboost.cpp sfann_main.cpp Sfann.hpp SfannException.hpp Icsiboost.hpp
 
 sfann_CXXFLAGS = -O3
 

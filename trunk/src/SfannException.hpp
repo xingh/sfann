@@ -30,6 +30,9 @@
 //   ..................................................................
 // 
 
+#ifndef __LIB_SFANNEXCEPTION__
+#define __LIB_SFANNEXCEPTION__
+
 #include <iostream>
 #include <string>
 #include <exception>
@@ -47,3 +50,4 @@ class SfannException : public exception {
         //char * what();
 };
 
+#endif
