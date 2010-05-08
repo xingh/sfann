@@ -97,7 +97,7 @@ The output of Sfann should look like this:
 -> Max classif rate on the test : train-mse=0.21  dev-ccr=92.86 %  test-ccr=100.00 %  
 }}}
 
-The lines starting by "-> Classif. rates of the best {{{<corpus>}}} MLP:" reports the performances of the MLP that performs the best on the corpus {{{<corpus>}}} on all the corpora. For a definition of CCR and MSE, please read the [FAQ#What_does_CCR_and_MSE_stand_for_? FAQ].
+The lines starting by "-> Classif. rates of the best {{{<corpus>}}} MLP:" reports the performances on all the corpora of the MLP that performs the best on the corpus {{{<corpus>}}}. For a definition of CCR and MSE, please read the [FAQ#What_does_CCR_and_MSE_stand_for_? FAQ].
 
 The overall performances of the MLP is given after the line " => Overall classif. rate :".
 
