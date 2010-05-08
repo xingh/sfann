@@ -18,7 +18,7 @@ inputdata seperated by space
 outputdata seperated by space
 }}}
 
-Head of a file containing 240 exemples for a MLP with 5 inputs nd 3 outputs:
+Head of a file containing 240 examples for a MLP with 5 inputs and 3 outputs:
 
 {{{
 240 5 3
@@ -35,12 +35,12 @@ Please read the excellent documentation in the [http://code.google.com/p/icsiboo
 
 Currently, Sfann supports the fallowing Icsiboost classifiers:
   * Continuous: direct use of the value on a MLP input neuron
-  * Labels: one input neuron is created for each label; for a given exemple, the values are -1 except for the activated labels.
+  * Labels: one input neuron is created for each label; for a given example, the values are -1 except for the activated labels.
 <wiki:comment>
-  * Text (comming soon): one input neuron is created for each different word; for a given exemple, the values are the frequency of the words in the supplied text.
+  * Text (comming soon): one input neuron is created for each different word; for a given example, the values are the frequency of the words in the supplied text.
 </wiki:comment>
 
-= Usage exemples =
+= Usage examples =
 
 == Training a MLP ==
 
