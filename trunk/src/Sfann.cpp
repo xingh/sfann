@@ -226,6 +226,10 @@ void Sfann::load_data() throw (SfannException) {
         if ((*this->config).count("train")) {
             string train = (*this->config)["train"].as<string>();
 
+            if (!is_readable(train)) {
+                throw SfannException("File "+train+" is not present or not readable !");
+            }
+        
             cout << " ->  Reading " << train << " ...";
             this->train_data = fann_read_train_from_file(train.c_str());
             cout << " Ok ! (" << this->train_data->num_data << " examples)" << endl;
@@ -234,6 +238,10 @@ void Sfann::load_data() throw (SfannException) {
         if ((*this->config).count("test")) {
             string test = (*this->config)["test"].as<string>();
 
+            if (!is_readable(test)) {
+                throw SfannException("File "+test+" is not present or not readable !");
+            }
+
             cout << " ->  Reading " << test << " ...";
             this->test_data = fann_read_train_from_file(test.c_str());
             cout << " Ok ! (" << this->test_data->num_data << " examples)" << endl;
@@ -241,6 +249,10 @@ void Sfann::load_data() throw (SfannException) {
 
         if ((*this->config).count("dev")) {
             string dev = (*this->config)["dev"].as<string>();
+
+            if (!is_readable(dev)) {
+                throw SfannException("File "+dev+" is not present or not readable !");
+            }
 
             cout << " ->  Reading " << dev << " ...";
             this->dev_data = fann_read_train_from_file(dev.c_str());
@@ -442,14 +454,14 @@ int FANN_API Sfann::training_callback(struct fann *ann, struct fann_train_data *
         h << head;
         l << line;
         if (me->dev_data != NULL) {
-            sprintf(head, " : %-8s : %-12s", "Dev MSE", "Dev c. rate");
-            sprintf(line, "+----------+--------------");
+            sprintf(head, " : %-8s : %-8s", "Dev MSE", "Dev CCR");
+            sprintf(line, "+----------+----------");
             h << head;
             l << line;
         }
         if (me->test_data != NULL) {
-            sprintf(head, " : %-8s : %-12s", "Tst MSE", "Tst c. rate");
-            sprintf(line, "+----------+--------------");
+            sprintf(head, " : %-9s : %-9s", "Test MSE", "Test CCR");
+            sprintf(line, "+-----------+-----------");
             h << head;
             l << line;
         }
@@ -475,7 +487,7 @@ int FANN_API Sfann::training_callback(struct fann *ann, struct fann_train_data *
 
         if (verbose) {
             float dev_mse = fann_test_data(ann, me->dev_data);
-            printf(" : %.6f : %10.2f %%", dev_mse, dev_perfs*100);
+            printf(" : %.6f : %6.2f %%", dev_mse, dev_perfs*100);
         }
     }
 
@@ -488,7 +500,7 @@ int FANN_API Sfann::training_callback(struct fann *ann, struct fann_train_data *
 
         if (verbose) {
             float test_mse = fann_test_data(ann, me->test_data);
-            printf(" : %.6f : %10.2f %%", test_mse, test_perfs*100);
+            printf(" : %9.6f : %7.2f %%", test_mse, test_perfs*100);
         }
     }
 
@@ -1012,17 +1024,17 @@ void Sfann::print_training_res(training_res * t) {
             return;
         }
         if (t->net_max_train != NULL) {
-            printf("-> Max classif rate on the train: ");
+            printf("-> Classif. rates of the best train MLP: ");
             print_net_carac(t->net_max_train);
             printf("\n");
         }
         if (t->net_max_dev != NULL) {
-            printf("-> Max classif rate on the dev  : ");
+            printf("-> Classif. rates of the best dev MLP  : ");
             print_net_carac(t->net_max_dev);
             printf("\n");
         }
         if (t->net_max_test != NULL) {
-            printf("-> Max classif rate on the test : ");
+            printf("-> Classif. rates of the best test MLP : ");
             print_net_carac(t->net_max_test);
             printf("\n");
         }
@@ -1279,6 +1291,7 @@ void Sfann::generate_cross_corpus(folds & _folds, train_dev_test_couple * cross_
 void Sfann::do_training() {
 
     training_res * res_global = NULL;
+    bool verbose = (*me->config).count("verbose");
 
     if ((*this->config).count("do-nothing")) {
         return;
@@ -1327,7 +1340,7 @@ void Sfann::do_training() {
                     this->test_data = NULL;
                 }
 
-                training_res * res = this->do_normal_training(1);
+                training_res * res = this->do_normal_training(0);
 
                 cout << "Ok !" << endl;
 

@@ -52,6 +52,31 @@ int IcsiboostNames::getNeededNeurons() {
     return this->neededNeurons;
 }
 
+bool IcsiboostNames::isCommentLine(const string & line) {
+    size_t diese = line.find_first_of("#|");
+    return (line.find_first_not_of(" \t") == string::npos || diese < line.find_first_not_of(" #|\t"));
+}
+
+void IcsiboostNames::readNext(ifstream & f, string & line, int & num_line, bool skipComments) {
+    if (!f.eof()) {
+        getline(f, line);
+        num_line++;
+
+        if (skipComments) {
+            // skip comments and blank lines
+            while (!f.eof() && IcsiboostNames::isCommentLine(line)) {
+                getline(f, line);
+                num_line++;
+            }
+            if (f.eof() && IcsiboostNames::isCommentLine(line)) {
+                line = "";
+            }
+        }
+    } else {
+        line = "";
+    }
+}
+
 void IcsiboostNames::loadFile(const string & file) throw (SfannException) {
 
     ifstream f(file.c_str());
@@ -67,18 +92,19 @@ void IcsiboostNames::loadFile(const string & file) throw (SfannException) {
         this->file_path = file;
         int num_line = 0;
         string line;
-        getline(f, line);
-        num_line++;
 
-        this->labels = new IcsiboostParameterLabels(line);
+        IcsiboostNames::readNext(f, line, num_line, true);
 
+        if (line.size() > 0) {
+            this->labels = new IcsiboostParameterLabels(line);
+        } else {
+            throw SfannException("The file " + file + " does not contain a valid line !\n");
+        }
+        
         int num_parameter = 0;
         while(! f.eof()) {
-            getline(f, line);
-            num_line++;
-            // skip comments and blank lines
-            size_t diese = line.find_first_of("#");
-            if (line.size() > 0 && (diese == string::npos || diese > line.find_first_not_of(" #\t"))) {
+            IcsiboostNames::readNext(f, line, num_line, true);
+            if (line.size() > 0) {
                 vector<string> tokens;
                 IcsiboostUtils::tokenize(line, tokens, ":", true);
                 if (tokens.size() < 2) {
@@ -99,9 +125,7 @@ void IcsiboostNames::loadFile(const string & file) throw (SfannException) {
             }
         }
     } else {
-        ostringstream oss;
-        oss << "Impossible read of " << file << " !";
-        throw *new SfannException(oss.str());
+        throw SfannException("Impossible read of " + file + " !");
     }
 }
 
@@ -191,8 +215,8 @@ struct fann_train_data * IcsiboostDataParser::loadDataToFann(const string & file
             getline(f, line);
             num_line++;
             // skip comments and blank lines
-            size_t diese = line.find_first_of("#");
-            if (line.size() > 0 && (diese == string::npos || diese > line.find_first_not_of(" #\t"))) {
+            size_t diese = line.find_first_of("#|");
+            if (line.size() > 0 && (diese == string::npos || diese > line.find_first_not_of(" #|\t"))) {
                 file_content.push_back(line);
             }
         }
