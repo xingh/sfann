@@ -1,4 +1,5 @@
 #summary Tutorials on the use of Sfann
+#labels Deprecated
 
 Comming soon.
 
