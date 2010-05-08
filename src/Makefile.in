@@ -48,7 +48,8 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_sfann_OBJECTS = sfann-Sfann.$(OBJEXT) \
-	sfann-SfannException.$(OBJEXT) sfann-sfann_main.$(OBJEXT)
+	sfann-SfannException.$(OBJEXT) sfann-Icsiboost.$(OBJEXT) \
+	sfann-sfann_main.$(OBJEXT)
 sfann_OBJECTS = $(am_sfann_OBJECTS)
 sfann_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
@@ -152,7 +153,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-sfann_SOURCES = Sfann.cpp SfannException.cpp sfann_main.cpp Sfann.hpp SfannException.hpp
+sfann_SOURCES = Sfann.cpp SfannException.cpp Icsiboost.cpp sfann_main.cpp Sfann.hpp SfannException.hpp Icsiboost.hpp
 sfann_CXXFLAGS = -O3
 sfann_CPPFLAGS = -O3
 sfann_LDFLAGS = -O3 -static
@@ -222,6 +223,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sfann-Icsiboost.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sfann-Sfann.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sfann-SfannException.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sfann-sfann_main.Po@am__quote@
@@ -267,6 +269,20 @@ sfann-SfannException.obj: SfannException.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SfannException.cpp' object='sfann-SfannException.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sfann_CPPFLAGS) $(CPPFLAGS) $(sfann_CXXFLAGS) $(CXXFLAGS) -c -o sfann-SfannException.obj `if test -f 'SfannException.cpp'; then $(CYGPATH_W) 'SfannException.cpp'; else $(CYGPATH_W) '$(srcdir)/SfannException.cpp'; fi`
+
+sfann-Icsiboost.o: Icsiboost.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sfann_CPPFLAGS) $(CPPFLAGS) $(sfann_CXXFLAGS) $(CXXFLAGS) -MT sfann-Icsiboost.o -MD -MP -MF "$(DEPDIR)/sfann-Icsiboost.Tpo" -c -o sfann-Icsiboost.o `test -f 'Icsiboost.cpp' || echo '$(srcdir)/'`Icsiboost.cpp; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/sfann-Icsiboost.Tpo" "$(DEPDIR)/sfann-Icsiboost.Po"; else rm -f "$(DEPDIR)/sfann-Icsiboost.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Icsiboost.cpp' object='sfann-Icsiboost.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sfann_CPPFLAGS) $(CPPFLAGS) $(sfann_CXXFLAGS) $(CXXFLAGS) -c -o sfann-Icsiboost.o `test -f 'Icsiboost.cpp' || echo '$(srcdir)/'`Icsiboost.cpp
+
+sfann-Icsiboost.obj: Icsiboost.cpp
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sfann_CPPFLAGS) $(CPPFLAGS) $(sfann_CXXFLAGS) $(CXXFLAGS) -MT sfann-Icsiboost.obj -MD -MP -MF "$(DEPDIR)/sfann-Icsiboost.Tpo" -c -o sfann-Icsiboost.obj `if test -f 'Icsiboost.cpp'; then $(CYGPATH_W) 'Icsiboost.cpp'; else $(CYGPATH_W) '$(srcdir)/Icsiboost.cpp'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/sfann-Icsiboost.Tpo" "$(DEPDIR)/sfann-Icsiboost.Po"; else rm -f "$(DEPDIR)/sfann-Icsiboost.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Icsiboost.cpp' object='sfann-Icsiboost.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sfann_CPPFLAGS) $(CPPFLAGS) $(sfann_CXXFLAGS) $(CXXFLAGS) -c -o sfann-Icsiboost.obj `if test -f 'Icsiboost.cpp'; then $(CYGPATH_W) 'Icsiboost.cpp'; else $(CYGPATH_W) '$(srcdir)/Icsiboost.cpp'; fi`
 
 sfann-sfann_main.o: sfann_main.cpp
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(sfann_CPPFLAGS) $(CPPFLAGS) $(sfann_CXXFLAGS) $(CXXFLAGS) -MT sfann-sfann_main.o -MD -MP -MF "$(DEPDIR)/sfann-sfann_main.Tpo" -c -o sfann-sfann_main.o `test -f 'sfann_main.cpp' || echo '$(srcdir)/'`sfann_main.cpp; \

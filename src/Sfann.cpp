@@ -66,6 +66,7 @@ Sfann::Sfann() {
 
     options_description data("Data-related options");
     data.add_options()
+        ("stem,S", value<string>(), "Icsiboost-style data location: <stem>{.names,.data,.test,.dev} (Icsiboost data format)")
         ("train,t", value<string>(), "data file containing the training documents (fann data format)")
         ("dev,d", value<string>(), "data file containing the development documents (fann data format)")
         ("test,s", value<string>(), "data file containing the test documents (fann data format)")
@@ -104,7 +105,7 @@ Sfann::Sfann() {
         
     options_description run_opts("Do-running specific options");
     run_opts.add_options()
-        ("load-ann", value<string>(), "load the specified ANN")
+        ("load-ann", value<string>(), "load the specified ANN for classifying the test data")
         ("save-loaded-run", value<string>(), "save the results on the test corpus of the ANN loaded with --load-ann")
         ;
 
@@ -165,8 +166,8 @@ void Sfann::check_options() throw(SfannException) {
         throw *new SfannException("Incompatible options : --dev and --auto-dev");
     }
 
-    if ((training || cross_validate) && !this->config->count("train")) {
-        throw *new SfannException("You have to specify a training corpus (with --train)");
+    if ((training || cross_validate) && (!this->config->count("train") && !this->config->count("stem"))) {
+        throw *new SfannException("You have to specify a training corpus (with --train or --stem)");
     }
 
     if (this->config->count("do-running") + this->config->count("do-nothing") + this->config->count("do-training") + this->config->count("do-cross-validation") != 1) {
@@ -187,33 +188,68 @@ void Sfann::usage() {
 }
 
 
-void Sfann::load_data() {
-    if ((*this->config).count("train")) {
-        string train = (*this->config)["train"].as<string>();
+bool Sfann::is_readable(const string & file) {
+        ifstream f(file.c_str());
+        return !f.fail();
+}
 
-        cout << " ->  Reading " << train << " ...";
-        this->train_data = fann_read_train_from_file(train.c_str());
-        cout << " Ok ! (" << this->train_data->num_data << " examples)" << endl;
+void Sfann::load_data() throw (SfannException) {
+    if ((*this->config).count("stem")) {
+        string stem = (*this->config)["stem"].as<string>();
+        
+        if (!is_readable(stem+".names")) {
+            throw SfannException("File "+stem+".names needed but not present or not readable !");
+        }
+        cout << " ->  Reading " << stem << ".names ...";
+        IcsiboostNames names(stem+".names");
+        cout << " Ok !" << endl;
+
+        if (is_readable(stem+".data")) {
+            cout << " ->  Reading " << stem << ".data ...";
+            this->train_data = IcsiboostDataParser::loadDataToFann(stem+".data", names);
+            cout << " Ok ! (" << this->train_data->num_data << " examples)" << endl;
+        }
+        
+        if (is_readable(stem+".test")) {
+            cout << " ->  Reading " << stem << ".test ...";
+            this->test_data = IcsiboostDataParser::loadDataToFann(stem+".test", names);
+            cout << " Ok ! (" << this->test_data->num_data << " examples)" << endl;
+        }
+
+        if (is_readable(stem+".dev")) {
+            cout << " ->  Reading " << stem << ".dev ...";
+            this->dev_data = IcsiboostDataParser::loadDataToFann(stem+".dev", names);
+            cout << " Ok ! (" << this->dev_data->num_data << " examples)" << endl;
+        }
+        
+    } else {
+        if ((*this->config).count("train")) {
+            string train = (*this->config)["train"].as<string>();
+
+            cout << " ->  Reading " << train << " ...";
+            this->train_data = fann_read_train_from_file(train.c_str());
+            cout << " Ok ! (" << this->train_data->num_data << " examples)" << endl;
+        }
+
+        if ((*this->config).count("test")) {
+            string test = (*this->config)["test"].as<string>();
+
+            cout << " ->  Reading " << test << " ...";
+            this->test_data = fann_read_train_from_file(test.c_str());
+            cout << " Ok ! (" << this->test_data->num_data << " examples)" << endl;
+        }
+
+        if ((*this->config).count("dev")) {
+            string dev = (*this->config)["dev"].as<string>();
+
+            cout << " ->  Reading " << dev << " ...";
+            this->dev_data = fann_read_train_from_file(dev.c_str());
+            cout << " Ok ! (" << this->dev_data->num_data << " examples)" << endl;
+        }
     }
-
-    if ((*this->config).count("test")) {
-        string test = (*this->config)["test"].as<string>();
-
-        cout << " ->  Reading " << test << " ...";
-        this->test_data = fann_read_train_from_file(test.c_str());
-        cout << " Ok ! (" << this->test_data->num_data << " examples)" << endl;
-    }
-
-    if ((*this->config).count("dev")) {
-        string dev = (*this->config)["dev"].as<string>();
-
-        cout << " ->  Reading " << dev << " ...";
-        this->dev_data = fann_read_train_from_file(dev.c_str());
-        cout << " Ok ! (" << this->dev_data->num_data << " examples)" << endl;
-    }
-
+    
     if ((*this->config).count("auto-dev")) {
-        delete this->dev_data; this->dev_data = NULL;
+        if (this->dev_data != NULL) {delete this->dev_data; this->dev_data = NULL;}
         create_dev_from_train_corpus(this->dev_data, this->train_data, this->test_data, (*this->config)["auto-dev"].as<int>());
     }
 
@@ -227,6 +263,23 @@ void Sfann::print_map(map<int, int> & m) {
     for (map<int,int>::iterator it = m.begin(); it != m.end(); ++it) {
         cout << "  - " << it->first << " -> " << it->second << "\n";
         total += it->second;
+    }
+}
+
+
+// struct fann_train_data * Sfann::load_data_from_icsiboost(const IcsiboostNames & names, const string file) {
+// 
+// }
+
+void Sfann::print_fann_train_data(struct fann_train_data * data) {
+    for (int i=0; i<data->num_data; i++) {
+        for (int j=0; j<data->num_input; j++) {
+            cout << data->input[i][j] << " ";
+        }
+        cout << endl;
+        for (int j=0; j<data->num_output; j++)
+            cout << data->output[i][j] << " ";
+        cout << endl;
     }
 }
 
@@ -947,9 +1000,9 @@ void Sfann::add_training_res(training_res * src, training_res * dest) {
 
 void Sfann::print_net_carac(net_carac * nc) {
     if (nc != NULL) {
-        if (nc->train_mse >= 0) printf("train-mse=%.2f ", nc->train_mse);
-        if (nc->dev_perfs >= 0) printf("dev=%.2f ",nc->dev_perfs*100);
-        if (nc->test_perfs >= 0) printf("test=%.2f ",nc->test_perfs*100);
+        if (nc->train_mse >= 0) printf("train-mse=%.2f  ", nc->train_mse);
+        if (nc->dev_perfs >= 0) printf("dev-ccr=%.2f %%  ",nc->dev_perfs*100);
+        if (nc->test_perfs >= 0) printf("test-ccr=%.2f %%  ",nc->test_perfs*100);
     }
 }
 
@@ -959,17 +1012,17 @@ void Sfann::print_training_res(training_res * t) {
             return;
         }
         if (t->net_max_train != NULL) {
-            printf("-> Classif max sur le train : ");
+            printf("-> Max classif rate on the train: ");
             print_net_carac(t->net_max_train);
             printf("\n");
         }
         if (t->net_max_dev != NULL) {
-            printf("-> Classif max sur le dev   : ");
+            printf("-> Max classif rate on the dev  : ");
             print_net_carac(t->net_max_dev);
             printf("\n");
         }
         if (t->net_max_test != NULL) {
-            printf("-> Classif max sur le test  : ");
+            printf("-> Max classif rate on the test : ");
             print_net_carac(t->net_max_test);
             printf("\n");
         }
@@ -1144,7 +1197,7 @@ void Sfann::init_structure_metadata(struct fann_train_data * src, struct fann_tr
         return;
     }
 
-    dest->errno_f = src->errno_f;
+    dest->errno_f = FANN_E_NO_ERROR;
     dest->error_log = NULL; // src->error_log;
     dest->errstr = NULL; // src->errstr;
     dest->num_input = src->num_input;

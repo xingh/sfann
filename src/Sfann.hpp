@@ -35,6 +35,7 @@
 #define __LIB_SANN__
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <iterator>
 #include <algorithm>
@@ -48,7 +49,7 @@
 #include <boost/program_options.hpp>
 #include "fann.h"
 #include "SfannException.hpp"
-
+#include "Icsiboost.hpp"
 
 using namespace std;
 using namespace boost::program_options;
@@ -157,7 +158,8 @@ class Sfann {
 
         static void create_dev_from_train_corpus(struct fann_train_data * & _dev_data, struct fann_train_data * & _train_data, const struct fann_train_data * _test_data, int dev_size) throw (SfannException);
 
-
+        static bool is_readable(const string & file);
+        
 // 		static net_carac * best_dev;
 // 		static net_carac * best_train;
 
@@ -165,6 +167,8 @@ class Sfann {
 
 
     public:
+        static void print_fann_train_data(struct fann_train_data * data);
+        
         static Sfann * getInstance();
         static void deleteInstance();
 
@@ -172,7 +176,7 @@ class Sfann {
         void check_options() throw (SfannException);
         // lance l'apprentissage (main)
         void do_training();
-        void load_data();
+        void load_data() throw (SfannException);
         void usage();
 };
 
