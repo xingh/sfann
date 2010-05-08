@@ -91,6 +91,8 @@ class IcsiboostNames {
         int neededNeurons;
 
         void loadFile(const string & file) throw (SfannException);
+        static bool isCommentLine(const string & line);
+        static void readNext(ifstream & f, string & line, int & num_line, bool skipComments);
 
     public:
 
