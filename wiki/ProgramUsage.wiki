@@ -1,6 +1,8 @@
 #summary How to use the program
 #labels Featured
 
+<wiki:toc max_depth="2" />
+
 = Data format =
 
 Sfann accepts two data format: the native Fann data format and the [http://code.google.com/p/icsiboost Icsiboost] data format.
