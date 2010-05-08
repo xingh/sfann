@@ -1,0 +1,8 @@
+#Frequently Asked Questions
+
+=== What does CCR and MSE stand for ?  ===
+
+In the context of MLP evaluation, MSE means _Mean Square Error_ and CCR means _Correct Classification Rate_. The lower the MSE is and the higher the CCR is, the better the MLP is. The measures are computed according to these formulas:
+
+  * CCR = num_exemples_correctly_classified / num_exemples_to_classify
+  * MSE = sum_over_output_neurons((output_neuron_value-expected_output_neuron_value)^2)/num_output_neurons
